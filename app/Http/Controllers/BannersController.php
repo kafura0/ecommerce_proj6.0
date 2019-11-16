@@ -29,7 +29,7 @@ class BannersController extends Controller
 
 			// Upload Image
             if($request->hasFile('image')){
-            	$image_tmp = Input::file('image');
+            	$image_tmp = $request->file('image');
                 if ($image_tmp->isValid()) {
                     // Upload Images after Resize
                     $extension = $image_tmp->getClientOriginalExtension();
@@ -69,7 +69,7 @@ class BannersController extends Controller
 
             // Upload Image
             if($request->hasFile('image')){
-                $image_tmp = Input::file('image');
+                $image_tmp = $request->file('image');
                 if ($image_tmp->isValid()) {
                     // Upload Images after Resize
                     $extension = $image_tmp->getClientOriginalExtension();

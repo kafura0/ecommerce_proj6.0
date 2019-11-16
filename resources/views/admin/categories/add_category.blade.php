@@ -36,7 +36,7 @@
                 <div class="control-group">
                     <label class="control-label">Description</label>
                     <div class="controls">
-                      <textarea type="text" name="description" id="description"></textarea>
+                      <textarea type="text" name="description" id="description" class="textarea_editor span7"></textarea>
                     </div>
                   </div>
                 <div class="control-group">

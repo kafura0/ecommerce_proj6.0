@@ -49230,7 +49230,46 @@ Vue.component('example-component', __webpack_require__(/*! ./components/ExampleC
 var app = new Vue({
   el: '#app',
   data: {
-    testmsg: 'test message'
+    testmsg: 'CONTACT US',
+    responsemsg: '',
+    search: '',
+    enquiries: []
+  },
+  ready: function ready() {
+    this.created();
+  },
+  created: function created() {
+    var _this = this;
+
+    axios.get('/admin/get-enquiries').then(function (response) {
+      _this.enquiries = response.data;
+    })["catch"](function (error) {
+      console.log(error);
+    });
+  },
+  computed: {
+    filteredEnquiries: function filteredEnquiries() {
+      var _this2 = this;
+
+      return this.enquiries.filter(function (enquiry) {
+        return enquiry.name.toLowerCase().includes(_this2.search.toLowerCase());
+      });
+    }
+  },
+  methods: {
+    addPost: function addPost() {
+      axios.post('/page/post', {
+        name: this.name,
+        email: this.email,
+        subject: this.subject,
+        message: this.message
+      })
+      /*.then(post => this.$emit('completed', name));*/
+      .then(function (response) {
+        /*alert(response.data);*/
+        app.responsemsg = response.data;
+      });
+    }
   }
 });
 
@@ -49381,8 +49420,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\xampp\htdocs\ecommerce_proj5.7\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\xampp\htdocs\ecommerce_proj5.7\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\xampp\htdocs\ecommerce_proj6.0\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\xampp\htdocs\ecommerce_proj6.0\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

@@ -46,6 +46,12 @@
 <script src="{{ asset('js/backend_js/matrix.tables.js') }}"></script>
 <script src="{{ asset('js/backend_js/matrix.popover.js') }}"></script>
 <script src="{{ asset('js/backend_js/sweetalert.min.js') }}"></script>
+<script src="{{ asset('js/backend_js/wysihtml5-0.3.0.js') }} "></script> 
+<script src="{{ asset('js/backend_js/bootstrap-wysihtml5.js') }} "></script> 
+<script>
+  $('.textarea_editor').wysihtml5();
+  $('.textarea_care').wysihtml5();
+</script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 {{-- <script src="{{ asset('js/app.js') }}"></script> --}}
 

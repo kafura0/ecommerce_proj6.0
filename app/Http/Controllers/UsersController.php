@@ -10,6 +10,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use App\Exports\usersExport;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class UsersController extends Controller
 {
@@ -252,7 +255,6 @@ class UsersController extends Controller
         }
     }
 
-
     public function logout()
     {
         Auth::logout();
@@ -283,5 +285,9 @@ class UsersController extends Controller
         return view('admin.users.view_users')->with(compact('users'));
     }
 
+    public function exportUsers()
+    {
+        return Excel::download(new usersExport, 'users.xlsx');
+    }
     
 }

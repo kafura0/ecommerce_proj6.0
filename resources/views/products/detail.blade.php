@@ -117,11 +117,11 @@
 						</div>
 						<div class="tab-content">
 							<div class="tab-pane fade" id="description" >
-								<p> {{ $productDetails->description }}</p>
+								<p> <?php echo nl2br($productDetails->description) ?> </p>
 							</div>
 							
 							<div class="tab-pane fade" id="care" >
-								<p> {{ $productDetails->care }}</p>
+								<p> <?php echo nl2br($productDetails->care) ?> }}</p>
 							</div>
 								<p></p>
 							<div class="tab-pane fade" id="delivery" >

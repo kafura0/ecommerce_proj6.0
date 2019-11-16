@@ -18,6 +18,9 @@
             </div>
         @endif
   </div>
+<div style="margin-left: 20px;">
+    <a href="{{ url('/admin/export_products') }}" class="btn btn-primary"> Export</a>
+</div>
   <div class="container-fluid">
     <hr>
     <div class="row-fluid">

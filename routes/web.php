@@ -129,6 +129,9 @@ Route::group(['middleware' => ['adminLogin']], function () {
        Route::get('/admin/view_products','ProductsController@viewProducts');
        Route::get('/admin/delete_product/{id}','ProductsController@deleteProduct');
        Route::get('/admin/delete_product_image/{id}','ProductsController@deleteProductImage');
+       // Export Products
+       Route::get('/admin/export_products','ProductsController@exportProducts');
+
 
        //attributes routes
        Route::match(['get','post'],'admin/add_attributes/{id}','ProductsController@addAttributes');
@@ -154,11 +157,17 @@ Route::group(['middleware' => ['adminLogin']], function () {
        Route::get('/admin/view_order_details/{id}','ProductsController@viewOrderDetails');
        //order invoice
        Route::get('/admin/view_order_invoice/{id}','ProductsController@viewOrderInvoice');
+       // Print PDF Invoice
+       Route::get('/admin/print_pdf_invoice/{id}','ProductsController@printPDFInvoice');
+
        Route::post('/admin/update_order_status','ProductsController@updateOrderStatus'); 
 
        //admin manage users
        // Admin Users Route
        Route::get('/admin/view_users','UsersController@viewUsers');
+       // Export Users
+       Route::get('/admin/export_users','UsersController@exportUsers');
+
 
        //admin/ sub admin roles routes
        Route::get('/admin/view_admins','AdminController@viewAdmins');

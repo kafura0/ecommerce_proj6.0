@@ -13,14 +13,17 @@ use App\Coupon;
 use App\Country;
 use App\Product;
 use App\Category;
+use Dompdf\Dompdf;
 use App\OrdersProduct;
 use App\ProductsImage;
 use App\DeliveryAddress;
-use Intervention\Image\Facades\Image;
 use App\ProductsAttribute;
 use Illuminate\Http\Request;
+use App\Exports\productsExport;
 use Illuminate\Support\Facades\Mail;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Input;
+use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Redirect;
 
 class ProductsController extends Controller
@@ -93,7 +96,7 @@ class ProductsController extends Controller
             if($request->hasFile('image'))
             {
                 //echo $image_tmp = Input::file('image'); die;
-                $image_tmp = Input::file('image');
+                $image_tmp = $request->file('image');
                 if($image_tmp->isValid())
                 {
                     //echo "test";die;
@@ -187,7 +190,7 @@ class ProductsController extends Controller
             if($request->hasFile('image'))
             {
                 //echo $image_tmp = Input::file('image'); die;
-                $image_tmp = Input::file('image');
+                $image_tmp = $request->file('image');
                 if($image_tmp->isValid())
                 {
                     //echo "test";die;
@@ -508,6 +511,11 @@ class ProductsController extends Controller
         return redirect()->back()->with('flash_message_success', 'Product Alternate image deleted successfully');
     }
 
+    public function exportProducts()
+    {
+        return Excel::download(new productsExport, 'products.xlsx');
+    }
+
     public function viewOrders()
     {
         if(Session::get('adminDetails')['orders_access']==0)
@@ -536,7 +544,7 @@ class ProductsController extends Controller
         return view('admin.orders.view_order_details')->with(compact('orderDetails','userDetails'));
     }
 
-    //printable order invoice
+    //order invoice
     public function viewOrderInvoice($order_id)
     {
         if(Session::get('adminDetails')['orders_access']==0)
@@ -551,6 +559,260 @@ class ProductsController extends Controller
         /*$userDetails = json_decode(json_encode($userDetails));
         echo "<pre>"; print_r($userDetails);*/
         return view('admin.orders.view_order_invoice')->with(compact('orderDetails','userDetails'));
+    }
+
+    public function printPDFInvoice($order_id)
+    {
+        if(Session::get('adminDetails')['orders_access']==0)
+        {
+            return redirect('/admin/dashboard')->with('flash_message_error','You have no access to this module');
+        }
+        $orderDetails = Order::with('orders')->where('id',$order_id)->first();
+        $orderDetails = json_decode(json_encode($orderDetails));
+        /*echo "<pre>"; print_r($orderDetails); die;*/
+        $user_id = $orderDetails->user_id;
+        $userDetails = User::where('id',$user_id)->first();
+        /*$userDetails = json_decode(json_encode($userDetails));
+        echo "<pre>"; print_r($userDetails);*/
+        
+        $output = '
+        <!DOCTYPE html>
+        <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <title>Example 1</title>
+            <style>
+            .clearfix:after {
+                content: "";
+                display: table;
+                clear: both;
+              }
+              
+              a {
+                color: #5D6975;
+                text-decoration: underline;
+              }
+              
+              body {
+                position: relative;
+                width: 21cm;  
+                height: 29.7cm; 
+                margin: 0 auto; 
+                color: #001028;
+                background: #FFFFFF; 
+                font-family: Arial, sans-serif; 
+                font-size: 12px; 
+                font-family: Arial;
+              }
+              
+              header {
+                padding: 10px 0;
+                margin-bottom: 30px;
+              }
+              
+              #logo {
+                text-align: center;
+                margin-bottom: 10px;
+              }
+              
+              #logo img {
+                width: 90px;
+              }
+              
+              h1 {
+                border-top: 1px solid  #5D6975;
+                border-bottom: 1px solid  #5D6975;
+                color: #5D6975;
+                font-size: 2.4em;
+                line-height: 1.4em;
+                font-weight: normal;
+                text-align: center;
+                margin: 0 0 20px 0;
+                background: url(dimension.png);
+              }
+              
+              #project {
+                float: left;
+              }
+              
+              #project span {
+                color: #5D6975;
+                text-align: right;
+                width: 52px;
+                margin-right: 10px;
+                display: inline-block;
+                font-size: 0.8em;
+              }
+              
+              #company {
+                float: right;
+                text-align: right;
+              }
+              
+              #project div,
+              #company div {
+                white-space: nowrap;        
+              }
+              
+              table {
+                width: 100%;
+                border-collapse: collapse;
+                border-spacing: 0;
+                margin-bottom: 20px;
+              }
+              
+              table tr:nth-child(2n-1) td {
+                background: #F5F5F5;
+              }
+              
+              table th,
+              table td {
+                text-align: center;
+              }
+              
+              table th {
+                padding: 5px 20px;
+                color: #5D6975;
+                border-bottom: 1px solid #C1CED9;
+                white-space: nowrap;        
+                font-weight: normal;
+              }
+              
+              table .service,
+              table .desc {
+                text-align: left;
+              }
+              
+              table td {
+                padding: 20px;
+                text-align: right;
+              }
+              
+              table td.service,
+              table td.desc {
+                vertical-align: top;
+              }
+              
+              table td.unit,
+              table td.qty,
+              table td.total {
+                font-size: 1.2em;
+              }
+              
+              table td.grand {
+                border-top: 1px solid #5D6975;;
+              }
+              
+              #notices .notice {
+                color: #5D6975;
+                font-size: 1.2em;
+              }
+              
+              footer {
+                color: #5D6975;
+                width: 100%;
+                height: 30px;
+                position: absolute;
+                bottom: 0;
+                border-top: 1px solid #C1CED9;
+                padding: 8px 0;
+                text-align: center;
+              }
+            </style>
+          </head>
+          <body>
+            <header class="clearfix">
+              <div id="logo">
+                <img src="images/backend_images/logo.png">
+              </div>
+              <h1>INVOICE '.$orderDetails->id.'</h1>
+              <div id="project" class="clearfix">
+              <div><span>Order ID</span> '.$orderDetails->id.'</div>
+              <div><span>Order Date</span> '.$orderDetails->created_at.'</div>
+              <div><span>Order Amount</span> '.$orderDetails->grand_total.'</div>
+              <div><span>Order status</span> '.$orderDetails->order_status.'</div>
+              <div><span>Payment Method</span> '.$orderDetails->payment_method.'</div>
+              </div>
+              <div id="project" style="float:right;">
+                <div><strong>Shipping Address </strong></div>
+                <div><span>Name: </span> '.$orderDetails->name.'</div>
+                <div><span>Address</span> '.$orderDetails->address.','.$orderDetails->city.'</div>
+                <div><span>State</span> '.$orderDetails->state.'</div>
+                <div><span>Pincode</span> '.$orderDetails->pincode.'</div>
+                <div><span>Country</span> '.$orderDetails->country.'</div>
+                <div><span>Mobile</span> '.$orderDetails->mobile.'</div>
+              </div>
+            </header>
+            <main>
+              <table>
+                <thead>
+                  <tr>
+                  <td style="width:18%"><strong>Product Code</strong></td>
+                  <td style="width:18%" class="text-center"><strong>Size</strong></td>
+                  <td style="width:18%" class="text-center"><strong>Color</strong></td>
+                  <td style="width:18%" class="text-center"><strong>Price</strong></td>
+                  <td style="width:18%" class="text-center"><strong>Qty</strong></td>
+                  <td style="width:18%" class="text-right"><strong>Totals</strong></td>
+                  </tr>
+                </thead>
+                <tbody>';
+        $Subtotal = 0; 
+        foreach($orderDetails->orders as $pro){
+        $output .= '<tr>
+                    <td class="text-left"> '.$pro->product_code.'</td>
+                    <td class="text-center"> '.$pro->product_size.' </td>
+                    <td class="text-center">'.$pro->product_color.'</td>
+                    <td class="text-center">KES '.$pro->product_price.'</td>
+                    <td class="text-center">'.$pro->product_qty.'</td>
+                    <td class="text-right">KES'.$pro->product_price * $pro->product_qty.'</td>
+                </tr>';
+        $Subtotal = $Subtotal + ($pro->product_price * $pro->product_qty); }                
+        $output .= '<tr>
+                    <td class="thick-line"></td>
+                    <td class="thick-line"></td>
+                    <td class="thick-line"></td>
+                    <td class="thick-line"></td>
+                    <td class="thick-line text-center"><strong>Subtotal</strong></td>
+                    <td class="thick-line text-right">KES'.$Subtotal.'</td>
+                </tr>
+                <tr>
+                    <td class="no-line"></td>
+                    <td class="no-line"></td>
+                    <td class="no-line"></td>
+                    <td class="no-line"></td>
+                    <td class="no-line text-center"><strong>Shipping Charges (+)</strong></td>
+                    <td class="no-line text-right">KES '.$orderDetails->shipping_charges.'</td>
+                </tr>
+                <tr>
+                    <td class="no-line"></td>
+                    <td class="no-line"></td>
+                    <td class="no-line"></td>
+                    <td class="no-line"></td>
+                    <td class="no-line text-center"><strong>Coupon Discount (-)</strong></td>
+                    <td class="no-line text-right">KES'.$orderDetails->coupon_amount.'</td>
+                </tr>
+                <tr>
+                    <td class="no-line"></td>
+                    <td class="no-line"></td>
+                    <td class="no-line"></td>
+                    <td class="no-line"></td>
+                    <td class="no-line text-center"><strong>Grand Total</strong></td>
+                    <td class="no-line text-right">KES'.$orderDetails->grand_total.'</td>
+                </tr>
+              </table>
+            </main>
+            <footer>
+              Invoice was created on a computer and is valid without the signature and seal.
+            </footer>
+          </body>
+        </html>';
+
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml($output);
+
+        $dompdf->setPaper('A4','landscape');
+        $dompdf->render();
+        $dompdf->stream();
     }
 
     public function updateOrderStatus(Request $request)
