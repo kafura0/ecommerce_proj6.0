@@ -5,7 +5,7 @@
 	<div class="container">
 		<div class="row">
 			  <!----- display error or success message of category update----->
-			  @if(Session::has('flash_message_warning'))
+			  @if(Session::has('flash_message_error'))
 			  <div class="alert alert-error alert-block" >
 				<button type="button" class="close" data-dismiss="alert">×</button> 
 				<strong>{!! session('flash_message_error') !!}</strong>
@@ -68,7 +68,7 @@
 									<p>Pattern: {{  $productDetails->pattern }}</p>
 								@endif
 								<p>
-										<select id="selSize" name="size" style="width:150px;" required>
+										<select id="selSize" name="size" style="width:150px;" >
 											<option value="">Select</option>
 											@foreach($productDetails->attributes as $sizes)
 											<option value="{{ $productDetails->id }}-{{ $sizes->size }}">{{ $sizes->size }}</option>
@@ -83,13 +83,17 @@
 									<span id="getPrice">Ksh {{ $productDetails->price }}
 									</span>
 									<label>Quantity: </label>
-									<input type="text" name="quantity" value="" required/>
+									<input type="text" name="quantity" value=""/>
 									@if($total_stock>0)
-										<button type="submit" class="btn btn-fefault cart" id="cartButton">
+										<button type="submit" class="btn btn-fefault cart" id="cartButton" name="cartButton" value="Shopping Cart">
 											<i class="fa fa-shopping-cart"></i>
 											Add to cart
 										</button>
 									@endif
+										<button type="submit" class="btn btn-fefault cart" id="wishListButton" name="wishListButton" value="WishList">
+											<i class="fa fa-briefcase"></i>
+											Add to wishlist
+										</button>
 								</span>
 								<p><b>Availability:</b><span id="Availability"> @if($total_stock>0) In Stock @else Out Of Stock @endif </span></p>
 								<p><b>Condition:</b> New</p>

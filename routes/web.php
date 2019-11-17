@@ -82,6 +82,11 @@ Route::group(['middleware'=>['frontLogin']],function(){
 	// Checkout Page
        Route::match(['get','post'],'checkout','ProductsController@checkout');
        
+       // Wish List Page
+       Route::match(['get', 'post'],'/wish_list','ProductsController@wishList');
+       // Delete Product from Wish List Route
+       Route::get('/wish_list/delete_product/{id}','ProductsController@deleteWishlistProduct');
+
 	// Order Review Page
 	Route::match(['get','post'],'/order_review','ProductsController@orderReview');
 	// Place Order
