@@ -6,11 +6,12 @@ use Auth;
 use Session;
 use App\User;
 use App\Country;
+use Carbon\Carbon;
+use App\Exports\usersExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use App\Exports\usersExport;
 use Maatwebsite\Excel\Facades\Excel;
 
 
@@ -196,7 +197,8 @@ class UsersController extends Controller
         }
     }
 
-    public function forgotPassword(Request $request){
+    public function forgotPassword(Request $request)
+    {
         if($request->isMethod('post')){
             $data = $request->all();
             /*echo "<pre>"; print_r($data); die;*/
@@ -235,7 +237,6 @@ class UsersController extends Controller
         }
         return view('users.forgot_password');
     }
-
 
     public function updatePassword(Request $request)
     {
@@ -283,6 +284,30 @@ class UsersController extends Controller
         }
         $users = User::get();
         return view('admin.users.view_users')->with(compact('users'));
+    }
+
+    public function viewUsersCharts()
+    {
+        $current_month_users = User::whereYear('created_at', Carbon::now()->year)
+                                    ->whereMonth('created_at', Carbon::now()->month)->count(); 
+                                
+        $last_month_users = User::whereYear('created_at', Carbon::now()->year)
+                                    ->whereMonth('created_at', Carbon::now()->subMonth(1))->count(); 
+        
+        $one_month_ago_users = User::whereYear('created_at', Carbon::now()->year)
+                                    ->whereMonth('created_at', Carbon::now()->subMonth(2))->count(); 
+        
+        $two_month_ago_users = User::whereYear('created_at', Carbon::now()->year)
+                                    ->whereMonth('created_at', Carbon::now()->subMonth(3))->count(); 
+        
+        $three_month_ago_users = User::whereYear('created_at', Carbon::now()->year)
+                                    ->whereMonth('created_at', Carbon::now()->subMonth(4))->count(); 
+                                    
+        $four_month_ago_users = User::whereYear('created_at', Carbon::now()->year)
+                                    ->whereMonth('created_at', Carbon::now()->subMonth(5))->count(); 
+
+        return view('admin.users.chart_users')->with(compact('current_month_users', 'last_month_users', 
+        'one_month_ago_users', 'two_month_ago_users', 'three_month_ago_users','four_month_ago_users' ));
     }
 
     public function exportUsers()

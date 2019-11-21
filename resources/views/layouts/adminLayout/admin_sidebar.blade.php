@@ -56,6 +56,7 @@
     <li class="submenu"> <a href="#"><i class="icon icon-th-list"></i> <span>Orders</span> <span class="label label-important">1</span></a>
       <ul <?php if (preg_match("/orders/i", $url)){ ?> style="display: block;" <?php } ?>>
         <li <?php if (preg_match("/view_orders/i", $url)){ ?> class="active" <?php } ?>><a href="{{ url('/admin/view_orders')}}">View Orders</a></li>
+        <li <?php if (preg_match("/chart_orders/i", $url)){ ?> class="active" <?php } ?>><a href="{{ url('/admin/chart_orders')}}">View Orders Charts</a></li>
       </ul>
     </li>
     @endif
@@ -68,9 +69,10 @@
     </li>
     @endif
     @if(Session::get('adminDetails')['users_access']==1)
-    <li class="submenu"> <a href="#"><i class="icon icon-th-list"></i> <span>Users</span> <span class="label label-important">1</span></a>
+    <li class="submenu"> <a href="#"><i class="icon icon-th-list"></i> <span>Users</span> <span class="label label-important">2</span></a>
       <ul <?php if (preg_match("/users/i", $url)){ ?> style="display: block;" <?php } ?>>
         <li <?php if (preg_match("/view_users/i", $url)){ ?> class="active" <?php } ?>><a href="{{ url('/admin/view_users')}}">View Users</a></li>
+        <li <?php if (preg_match("/chart_users/i", $url)){ ?> class="active" <?php } ?>><a href="{{ url('/admin/chart_users')}}">View Users Charts</a></li>
       </ul>
     </li>
     @endif

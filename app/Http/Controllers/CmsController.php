@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\CmsPage;
-use App\Category;
 use Validator;
+use App\CmsPage;
+use App\Enquiry;
+use App\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -190,7 +191,7 @@ class CmsController extends Controller
     public function addPost(Request $request){
         if($request->isMethod('post')){
             $data = $request->all();
-            /*echo "<pre>"; print_r($data); die;*/
+            // echo "<pre>"; print_r($data); die;
             $enquiry = new Enquiry;
             $enquiry->name = $data['name'];
             $enquiry->email = $data['email'];

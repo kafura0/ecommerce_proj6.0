@@ -160,6 +160,8 @@ Route::group(['middleware' => ['adminLogin']], function () {
        //admin view orders
        Route::get('/admin/view_orders','ProductsController@viewOrders');
        Route::get('/admin/view_order_details/{id}','ProductsController@viewOrderDetails');
+       //chart orders
+       Route::get('/admin/chart_orders','ProductsController@viewOrdersCharts');
        //order invoice
        Route::get('/admin/view_order_invoice/{id}','ProductsController@viewOrderInvoice');
        // Print PDF Invoice
@@ -172,6 +174,8 @@ Route::group(['middleware' => ['adminLogin']], function () {
        Route::get('/admin/view_users','UsersController@viewUsers');
        // Export Users
        Route::get('/admin/export_users','UsersController@exportUsers');
+       // View Users Charts
+       Route::get('/admin/chart_users','UsersController@viewUsersCharts');
 
 
        //admin/ sub admin roles routes
@@ -190,6 +194,10 @@ Route::group(['middleware' => ['adminLogin']], function () {
 	Route::get('/admin/view_cms_pages','CmsController@viewCmsPages');
 	// Delete CMS Route 
        Route::get('/admin/delete_cms_page/{id}','CmsController@deleteCmsPage');
+       // Get Enquiries
+       Route::get('/admin/get-enquiries','CmsController@getEnquiries');
+       // View Enquiries
+	Route::get('/admin/view_enquiries','CmsController@viewEnquiries');
        
        //user enquiries routes
        // Get Enquiries

@@ -48,6 +48,7 @@
 				</div><!--features_items-->
 			</div>
 		</div>
+		</div>
 	</div>
 </section>
 

@@ -49231,7 +49231,7 @@ var app = new Vue({
   el: '#app',
   data: {
     testmsg: 'CONTACT US',
-    responsemsg: '',
+    responsemsg: 'fuck',
     search: '',
     enquiries: []
   },
@@ -49241,7 +49241,7 @@ var app = new Vue({
   created: function created() {
     var _this = this;
 
-    axios.get('/admin/get-enquiries').then(function (response) {
+    axios.get('/admin/get_enquiries').then(function (response) {
       _this.enquiries = response.data;
     })["catch"](function (error) {
       console.log(error);

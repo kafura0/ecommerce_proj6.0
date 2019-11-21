@@ -32,7 +32,7 @@ const app = new Vue({
     el: '#app',
     data:{
     	testmsg:'CONTACT US',
-        responsemsg:'',
+        responsemsg:'fuck',
         search:'',
         enquiries:[],
     },
@@ -40,7 +40,7 @@ const app = new Vue({
         this.created();
     },
     created(){
-        axios.get('/admin/get-enquiries')
+        axios.get('/admin/get_enquiries')
         .then(response => {
             this.enquiries = response.data;    
         })

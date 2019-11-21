@@ -53,7 +53,7 @@
   $('.textarea_care').wysihtml5();
 </script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-{{-- <script src="{{ asset('js/app.js') }}"></script> --}}
+<script src="{{ asset('js/app.js') }}"></script>
 
 <script>
   $( function() {
